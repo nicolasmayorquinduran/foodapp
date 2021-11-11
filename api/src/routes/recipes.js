@@ -4,7 +4,7 @@ const axios = require("axios")
 const { Recipes, Diets } = require ("../db");
 const { Router } = require('express');
 // const { types } = require('./types');
-const { Sequelize } = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
 
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
@@ -37,8 +37,8 @@ router.get("/recipes", async (req, res)=>{
     // [ ] Paso a paso
     
     try {
-    const {list} = req.query;
-    let result = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${list}&addRecipeInformation=true&apiKey=${APIKEY}`)
+    const {name} = req.query;
+    let result = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${name}&addRecipeInformation=true&apiKey=${APIKEY}`)
     .then(d => d.data.results)
     // console.log(result)
     let response = result.map(r => {
@@ -52,16 +52,17 @@ router.get("/recipes", async (req, res)=>{
             healthScore: r.healthScore,
         }
     })
+    let recipe = name.substr(1,name.length-2);
+    recipe = decodeURIComponent(recipe);
+    const allNewRecipes = await Recipes.findAll({ where: { "title": {[Op.substring]: recipe}}});
 
-    const allNewRecipes = await Recipes.findAll();
-
-    if(response.length<1 || allNewRecipes.length<1){
+    if(response.length<1 && allNewRecipes.length<1 ){
        return res.json({
         "results": [],
         "totalResults": 0
         })
     };
-    res.json(allNewRecipes)
+    res.json(allNewRecipes.concat(response))
 
       } catch (error) {
         res.status(404).send("error" + error)
