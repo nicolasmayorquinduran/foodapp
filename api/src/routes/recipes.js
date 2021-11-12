@@ -133,15 +133,6 @@ router.get("/recipes", async (req, res)=>{
         newRecipe.addDiets(newDiet)
       })
 
-      // const newDiet = await Diets.create({list});
-      // newRecipe.addDiets(newDiet);
-
-      // await newRecipe.addDiets({list:["gluten-free"]})
-
-
-      // if(list.length>0){
-      //   newRecipe.addDiets(list)
-      // }
 
       return res.send(`la receta ${title} ha sido creada`)
       //  const diet = await Recipes.findByPk(title);
