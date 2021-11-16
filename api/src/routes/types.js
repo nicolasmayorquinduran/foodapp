@@ -1,5 +1,6 @@
 const axios = require("axios");
 const { Recipes, Diets } = require("../db");
+const {APIKEY1, APIKEY2} = process.env;
 const { Router } = require("express");
 const { Op } = require("sequelize");
 
@@ -33,14 +34,14 @@ router.get("/recipes/:id", async (req, res) => {
     )
        res.json(diet);
     } catch (error) {
-       res.status(400).json(error.parent.hint)
+       res.status(400).json("error de base de datos")
     }
   } 
   else {
     try {
       let result = await axios
         .get(
-          `https://api.spoonacular.com/recipes/${id}/information?includeNutrition=false&apiKey=1bbbcdbba30040ebbfe05db95d9ec9c2`
+          `https://api.spoonacular.com/recipes/${id}/information?includeNutrition=false&apiKey=${APIKEY2}`
         )
         .then((d) => {
           delete d.data.extendedIngredients;
@@ -57,7 +58,7 @@ router.get("/recipes/:id", async (req, res) => {
         healthScore: result.healthScore,
       });
     } catch (error) {
-      return res.json(id);
+      return res.json("no hay resultado para la consulta o el límite de consultas se ha superado");
     }
   }
 });

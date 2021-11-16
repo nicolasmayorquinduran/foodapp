@@ -1,5 +1,5 @@
 require('dotenv').config();
-const {APIKEY} = process.env;
+const {APIKEY1, APIKEY2} = process.env;
 const axios = require("axios")
 const { Recipes, Diets } = require ("../db");
 const { Router } = require('express');
@@ -15,30 +15,49 @@ const router = Router();
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 
+
+
+router.get("/allrecipes", async (req,res) =>{
+  try{
+
+    let limit = 20;
+    let first100ApiRecipes = await axios.get( `https://api.spoonacular.com/recipes/complexSearch?&addRecipeInformation=true&information?includeNutrition=false&number=${limit}&apiKey=${APIKEY2}`
+    ) .then((d) => {
+      delete d.data.extendedIngredients;
+      return d.data.results;
+    }).catch(r => null);
+
+    const allNewRecipes = await Recipes.findAll({
+        include: [
+            { model: Diets,
+              attributes: ['list']
+            },
+        ]
+      });
+
+    res.json(allNewRecipes.concat(first100ApiRecipes))
+
+  } catch (error){
+    res.json("no hay resultado para la consulta o el límite de consultas se ha superado")
+  }
+})
+
+router.get("/recipes", async (req, res)=>{
+
 // [ ] GET /recipes?list="...":
-// Obtener un listado de las recetas que contengan la palabra ingresada como query parameter
+// Obtiene un listado de las recetas que contengan la palabra ingresada como query parameter
 // Si no existe ninguna receta mostrar un mensaje adecuado
-// const {image,
+//    {image,
 //     title,
 //     dishTypes,
 //     diets,
 //     summary,
 //     spoonacularScore,
-//     healthScore  } = req.query
-
-// }
-
-router.get("/recipes", async (req, res)=>{
-
-    //     (imagen, nombre, tipo de plato y tipo de dieta)
-    // [ ] Resumen del plato
-    // [ ] Puntuación
-    // [ ] Nivel de "comida saludable"
-    // [ ] Paso a paso
+//     healthScore  }
     
     try {
     const {name} = req.query;
-    let result = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${name}&addRecipeInformation=true&apiKey=${APIKEY}`)
+    let result = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${name}&addRecipeInformation=true&apiKey=${APIKEY2}`)
     .then(d => d.data.results)
     // console.log(result)
     let response = result.map(r => {
@@ -54,7 +73,16 @@ router.get("/recipes", async (req, res)=>{
     })
     let recipe = name.substr(1,name.length-2);
     recipe = decodeURIComponent(recipe);
-    const allNewRecipes = await Recipes.findAll({ where: { "title": {[Op.substring]: recipe}}});
+    const allNewRecipes = await Recipes.findAll({
+      where: { 
+        "title": {[Op.substring]: recipe}
+        },
+        include: [
+            { model: Diets,
+              attributes: ['list']
+            },
+        ]
+      });
 
     if(response.length<1 && allNewRecipes.length<1 ){
        return res.json({
@@ -65,10 +93,12 @@ router.get("/recipes", async (req, res)=>{
     res.json(allNewRecipes.concat(response))
 
       } catch (error) {
-        res.status(404).send("error" + error)
+        res.status(404).send("no hay resultado para la consulta o el límite de consultas se ha superado")
       }
 
     })
+
+
     
 
     
@@ -144,6 +174,9 @@ router.get("/recipes", async (req, res)=>{
       }
 
       });
+
+
+
 
 
 
