@@ -21,7 +21,7 @@ router.get("/allrecipes", async (req,res) =>{
   try{
 
     let limit = 20;
-    let first100ApiRecipes = await axios.get( `https://api.spoonacular.com/recipes/complexSearch?&addRecipeInformation=true&information?includeNutrition=false&number=${limit}&apiKey=${APIKEY2}`
+    let first100ApiRecipes = await axios.get( `https://api.spoonacular.com/recipes/complexSearch?&addRecipeInformation=true&information?includeNutrition=false&number=${limit}&apiKey=${APIKEY1}`
     ) .then((d) => {
       delete d.data.extendedIngredients;
       return d.data.results;
@@ -57,7 +57,7 @@ router.get("/recipes", async (req, res)=>{
     
     try {
     const {name} = req.query;
-    let result = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${name}&addRecipeInformation=true&apiKey=${APIKEY2}`)
+    let result = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${name}&addRecipeInformation=true&apiKey=${APIKEY1}`)
     .then(d => d.data.results)
     // console.log(result)
     let response = result.map(r => {

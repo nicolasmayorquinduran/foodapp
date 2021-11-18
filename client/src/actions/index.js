@@ -4,16 +4,15 @@ export const getAllRecipes = (payload) => {
 
     return function (dispatch){
         return axios.get(`http://localhost:3001/allrecipes`)
-        .then(recipes => {
-            dispatch({type:"GETALL", payload: recipes.data})
-        })
+        .then(recipes =>  dispatch({type:"GETALL", payload: recipes.data}))
     }
 };
 
-export const getRecipesByName = async (payload) => {
-    return async function (dispatch){
-        payload = await axios.get(`http://localhost:3001/recipes?name=${payload}`)
-        dispatch({type:"GET", payload: payload.data})
+export const getRecipesByName = (payload) => {
+    return function (dispatch){
+       return axios.get(`http://localhost:3001/recipes?name=${payload}`)
+       .then(results =>  dispatch({type:"SEARCH", payload: results.data})
+       )
     }
 };
 

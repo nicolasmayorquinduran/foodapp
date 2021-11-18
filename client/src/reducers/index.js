@@ -10,7 +10,7 @@ const initialState = {
         return {...state, allRecipes: action.payload}
     }
     if (action.type === "SEARCH") {
-        return state.resultsSearch = action.payload
+        return {...state, resultsSearch: action.payload}
     }
     if (action.type === "DETAIL") {
         return state.recipeDetail = action.payload
@@ -21,7 +21,6 @@ const initialState = {
     if (action.type === "POST") 
 
         return action.payload
-
 
     return state;
   }

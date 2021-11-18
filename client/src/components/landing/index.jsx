@@ -1,13 +1,23 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {useSelect, useDispatch} from "react-redux"
 import Pagination from '../pagination';
+import { getRecipesByName} from "../../actions"
 
-const index = () => {
+const Index = () => {
+
+    let [search, setSearch] = useState("");
+    let handleSearch = (e)=> setSearch(e.target.value);
+   const dispatch = useDispatch();
+    
+    console.log(search)
+
     return (
         <div>
-            Henry food
+            <input type="text" onChange={(e)=>handleSearch(e)}></input>
+            <button onClick={()=>dispatch(getRecipesByName(search))}>Search</button>
             <Pagination/>
         </div>
     );
 };
 
-export default index;
+export default Index;
