@@ -10,6 +10,7 @@ const recipe = ({image, title, diets}) => {
         <div>
             <h2>{title}</h2>
             <img src={image} alt="not found" />
+            <p>{diets}</p>
         </div>
     );
 };

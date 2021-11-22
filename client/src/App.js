@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './App.css';
 import Landing from './components/landing';
 import RecipeCreate from './components/recipeCreate';
@@ -18,7 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing/>}/>
           <Route exact path="/RecipeCreate" element={<RecipeCreate/>}/>
-          <Route exact path="/recipeDetail" element={<RecipeDetail/>}/>
+          <Route exact path="/recipeDetail/:id" element={<RecipeDetail/>}/>
           <Route path="*" element={'no existe esta pag'}/>
         </Routes>
     </Router>

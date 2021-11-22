@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCheck, faTimes, faCarrot, faEgg, faCheese, faDrumstickBite, faUtensils, faBreadSlice} from "@fortawesome/free-solid-svg-icons"
-import {useSelect, useDispatch} from "react-redux"
+import Step from './step';
+import { postRecipe} from "../../actions"
 // Font Awesome no es una librería de estilos, solo sirve para importar
 // íconos y no tener que descargarlos en local
 
@@ -12,11 +13,11 @@ const Index = () => {
     let [counter, setCounter] = useState(1)
 
     const [valuesForm, setValuesForm] = useState({
-   
+            list:[],
             steps: [],
     })
 
-    const handleSearch = (e) =>{
+    const handleValueForm = (e) =>{
 
         setValuesForm(
             {
@@ -26,21 +27,41 @@ const Index = () => {
         ) 
     }
 
-    const handleAddStep = (e) =>{
-        setCounter(counter++)
-    }
+    const handleAddDiet = (e) =>
+{   !valuesForm.list.includes(e.target.name)&&
+    setValuesForm({
+        ...valuesForm,
+        list:[...valuesForm.list, e.target.name]
+    })
+}
 
-    console.log(valuesForm, counter)
+const handleRemoveDiet = (e) =>{
+    valuesForm.list.includes(e.target.name)&&
+    setValuesForm({
+        ...valuesForm,
+        list:[...valuesForm.list.filter(diet => diet!=e.target.name)]}
+    ) 
+}
+
+const handleRemoveStep = (e) =>{
+    setValuesForm({
+        ...valuesForm,
+        steps:[...valuesForm.steps.filter((step,i)=> i!=e.target.name)]}
+    ) 
+}
+
+    console.log(valuesForm)
 
     return (
         <div>
-        <form>
+            <form>
+        
            <input 
            name = "title"
            type ="text" 
            placeholder='Recipe´s name'
            defaultValue =""
-           onChange={e => handleSearch(e)}
+           onChange={e => handleValueForm(e)}
           >
             </input> 
 
@@ -48,7 +69,7 @@ const Index = () => {
            name= "summary" 
            placeholder="Description"
            defaultValue =""
-           onChange={e => handleSearch(e)}
+           onChange={e => handleValueForm(e)}
            >
             </textarea> 
 
@@ -58,7 +79,7 @@ const Index = () => {
            name="score" 
            type="range" 
            min="0" max="100" defaultValue="50"
-           onChange={e => handleSearch(e)}/>
+           onChange={e => handleValueForm(e)}/>
            </div>
 
            <div className='healthScore'>
@@ -67,40 +88,65 @@ const Index = () => {
            name="healthScore"
            type="range"
            min="0"max="100" defaultValue="50"
-           onChange={e => handleSearch(e)}/>
+           onChange={e => handleValueForm(e)}/>
             </div>
 
             <div className='steps'></div>
            <label>Steps Preparation</label>
            <textarea 
-           name = {`step${counter}`} 
-           placeholder={`Describe step ${counter}`}
-           defaultValue =""
-           onChange={e => handleSearch(e)}
+           name = "step"
+           placeholder={`Describe step ${valuesForm.steps.length+1}`}
+           onChange={e => handleValueForm(e)}
            >
            </textarea>
-           <button onClick={()=> setCounter(counter++)} >
+           <button 
+           defaultValue = {counter}
+           onClick={(e)=> e.preventDefault(
+               setCounter(counter + 1),
+               setValuesForm(
+                   {
+                       ...valuesForm,
+                       steps:[...valuesForm.steps, valuesForm.step]
+                   }
+               )
+               )} >
                Add other step</button> 
+
+        <ul>
+            {valuesForm.steps.map((e,i) => {
+               return <li>
+                   <h4>{`Step ${i+1}`}</h4>
+                   <p>{e}</p>
+                   <button name={i} onClick={e => e.preventDefault(handleRemoveStep(e))}>X</button>
+               </li>
                
-
-           {/*
-
+               
+            })}
+        </ul>
+            
            
-           
-           <div className='types'>
+<div className='types'>
 
             <div className='diet'>
             <FontAwesomeIcon icon={faCarrot}/>
             <label>Vegetarian</label>
-           <input name="slider" type="range" min="0" max="1" value="0"/>
-
+            <input name="vegetarian" 
+            type="range" 
+            min="0" max="1" 
+            defaultValue="0"
+            onChange={e => e.target.value==1? handleAddDiet(e): handleRemoveDiet(e)}/>
 
            <div className='diet'>
             <FontAwesomeIcon icon={faCarrot}/>
             <FontAwesomeIcon icon={faEgg}/>
             <FontAwesomeIcon icon={faTimes}/>
             <label>Lacto Vegetarian</label>
-           <input name="slider" type="range" min="0" max="1" value="0"/>
+           <input name="lacto-vegetarian" 
+            type="range" 
+            min="0" 
+            max="1"
+            defaultValue="0"
+            onChange={e => e.target.value==1? handleAddDiet(e): handleRemoveDiet(e)}/>
            </div>
 
            <div className='diet'>
@@ -108,7 +154,12 @@ const Index = () => {
             <FontAwesomeIcon icon={faCheese}/>
             <FontAwesomeIcon icon={faTimes}/>
             <label>Ovo Vegetarian</label>
-           <input name="slider" type="range" min="0" max="1" value="0"/>
+           <input name="ovo-vegetarian" 
+            type="range" 
+            min="0" 
+            max="1"
+            defaultValue="0"
+            onChange={e => e.target.value==1? handleAddDiet(e): handleRemoveDiet(e)}/>
            </div>
 
            <div className='diet'>
@@ -116,7 +167,12 @@ const Index = () => {
            <FontAwesomeIcon icon={faEgg}/>
             <FontAwesomeIcon icon={faTimes}/>
             <label>Vegan</label>
-           <input name="slider" type="range" min="0" max="1" value="0"/>
+           <input name="vegan" 
+            type="range" 
+            min="0" 
+            max="1"
+            defaultValue="0"
+            onChange={e => e.target.value==1? handleAddDiet(e): handleRemoveDiet(e)}/>
            </div>
 
            </div>
@@ -124,7 +180,12 @@ const Index = () => {
             <FontAwesomeIcon icon={faDrumstickBite}/>
             <FontAwesomeIcon icon={faTimes}/>
             <label>Pescetarian</label>
-           <input name="slider" type="range" min="0" max="1" value="0"/>
+           <input name="pescetarian" 
+            type="range" 
+            min="0" 
+            max="1"
+            defaultValue="0"
+            onChange={e => e.target.value==1? handleAddDiet(e): handleRemoveDiet(e)}/>
            </div>
 
            <div className='diet'>
@@ -132,7 +193,12 @@ const Index = () => {
            <FontAwesomeIcon icon={faCheese}/>
             <FontAwesomeIcon icon={faTimes}/>
             <label>Paleolithic</label>
-           <input name="slider" type="range" min="0" max="1" value="0"/>
+           <input name="paleolithic" 
+            type="range" 
+            min="0" 
+            max="1"
+            defaultValue="0"
+            onChange={e => e.target.value==1? handleAddDiet(e): handleRemoveDiet(e)}/>
            </div>
 
            <div className='diet'>
@@ -140,38 +206,64 @@ const Index = () => {
            <FontAwesomeIcon icon={faCheese}/>
             <FontAwesomeIcon icon={faCheck}/>
             <label>Primal</label>
-           <input name="slider" type="range" min="0" max="1" value="0"/>
+           <input name="primal" 
+            type="range" 
+            min="0" 
+            max="1"
+            defaultValue="0"
+            onChange={e => e.target.value==1? handleAddDiet(e): handleRemoveDiet(e)}/>
            </div>
 
            <div className='diet'>
             <FontAwesomeIcon icon={faBreadSlice}/>
             <FontAwesomeIcon icon={faCheese}/>
             <label>Low Fodmap</label>
-           <input name="slider" type="range" min="0" max="1" value="0"/>
+           <input name="Low-fodmap" 
+            type="range" 
+            min="0" 
+            max="1"
+            defaultValue="0"
+            onChange={e => e.target.value==1? handleAddDiet(e): handleRemoveDiet(e)}/>
            </div>
 
            <div className='diet'>
             <FontAwesomeIcon icon={faUtensils}/>
             <label>whole30</label>
-           <input name="slider" type="range" min="0" max="1" value="0"/>
+           <input name="whole30" 
+            type="range" 
+            min="0" 
+            max="1"
+            defaultValue="0"
+            onChange={e => e.target.value==1? handleAddDiet(e): handleRemoveDiet(e)}/>
            </div>
 
            <div className='diet'>
            <FontAwesomeIcon icon={faCheese}/>
             <FontAwesomeIcon icon={faTimes}/>
             <label>Dairy-Free</label>
-           <input name="slider" type="range" min="0" max="1" value="0"/>
+           <input name="dairy-free" 
+            type="range" 
+            min="0" 
+            max="1"
+            defaultValue="0"
+            onChange={e => e.target.value==1? handleAddDiet(e): handleRemoveDiet(e)}/>
            </div>
 
            <div className='diet'>
            <FontAwesomeIcon icon={faBreadSlice}/>
             <FontAwesomeIcon icon={faTimes}/>
             <label>Gluten Free</label>
-           <input name="slider" type="range" min="0" max="1" value="0"/>
-           <input type="submit"></input>
-           </div>
+           <input name="gluten-free" 
+            type="range" 
+            min="0" 
+            max="1"
+            defaultValue="0"
+            onChange={e => e.target.value==1? handleAddDiet(e): handleRemoveDiet(e)}/>
+           <input type="submit" onClick={()=> postRecipe(valuesForm)}></input>
+           
+            </div>
     
-           </div> */}
+           </div>
         </form>
         </div>
     );
