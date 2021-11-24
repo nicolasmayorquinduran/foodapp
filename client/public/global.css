@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&family=Shadows+Into+Light&display=swap');
+
+body{
+    margin:0
+}
+
+ul {
+    margin: 0;
+}
+
+li{
+    list-style: none;
+}
+
+h1{
+    font-family: 'Shadows Into Light';
+    margin:0;
+}
+
+h2, h3, h4 {
+    font-family: 'Roboto';
+}
+
+p, label{
+    font-family: 'Roboto' ;
+    font-weight: 350;
+}
+
+/* tamaños iconos */
+
+/* altura de todos los iconos */
+.svg-inline--fa {
+    height: 5em;
+}
+
+/* ancho iconos nav */
+
+
+.svg-inline--fa.fa-w-14 {
+    width: 5em;
+}
+
+.svg-inline--fa.fa-w-18 {
+    width: 5em;
+}
+
+/* ancho icono buscar en landing*/
+
+.svg-inline--fa.fa-w-16 {
+    width: 3rem;
+}
+
+.svg-inline--fa.fa-w-18 {
+    height: 2rem;
+    width: 3rem !important;
+}
+

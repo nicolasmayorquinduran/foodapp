@@ -13,7 +13,7 @@ const initialState = {
         return {...state, resultsSearch: action.payload}
     }
     if (action.type === "DETAIL") {
-        return state.recipeDetail = action.payload
+        return {...state, recipeDetail: action.payload}
     }
     if (action.type === "TYPES") {
         return state.recipeTypes = action.payload

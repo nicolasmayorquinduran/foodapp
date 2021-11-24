@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector, useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Recipe from "./recipe"
-import {    getAllRecipes} from "../../actions"
-import {Link} from "react-router-dom"
-import {matchDiets, allRecipes} from "../landing/filters"
-
+import { getAllRecipes} from "../../actions"
+import {matchDiets, arraysToArray} from "../landing/filters"
+import estilos from "./pagination.module.css"
 
 
 const Index =  ({search, filter, dietsSelected}) => {
@@ -13,37 +12,69 @@ const Index =  ({search, filter, dietsSelected}) => {
     page: 9,
     first : 0,
   });
-
+    
+  let allRecipes = useSelector(state => state.allRecipes);
     const dispatch = useDispatch();
     useEffect(() =>{dispatch(getAllRecipes())},[])
+    // allRecipes= arraysToArray(allRecipes)
+    console.log(allRecipes[0])
+    const handleNextPage = () =>{
+      setstate(
+        {
+          ...state,
+          page: state.page + 9,
+          first: state.first + 9
+        }
+      )
+      }
 
-
+      const handleBeforePage = () =>{
+        setstate(
+          {
+            ...state,
+            page: state.page - 9,
+            first: state.first - 9
+          }
+        )
+        }
     return (
-        <div>
-            <button >anterior</button>
-            <button >siguiente</button>
+      
+        <div >
+            <button className={state.page - 9 > 0 ? estilos.button : estilos.none} onClick={() => handleBeforePage()} >anterior</button>
+            <button className={state.page /9 <  allRecipes.length/9 ? estilos.button : estilos.none} onClick={() => handleNextPage()}>siguiente</button>
 
         {   filter(matchDiets(allRecipes,dietsSelected)).map((r,i) => {
              
-            if(i!=state.first && r.title.toLowerCase().includes(search)){
+            if(i!=state.first && i>state.page-9 && i<state.page && r.title.toLowerCase().includes(search)){
               return <Recipe 
+              id={r.id}
               title = {r.title}
               image={r.image} 
-              diets={r.diets.join().replace("," , ", ")}
+              diets={r.diets.join().replace("," , ", ")
+              
+            }
               />
-            } else if (r.title.toLowerCase().includes(search)){
-              return <div className='First-result'>
+            } else if (i===state.first && r.title.toLowerCase().includes(search)){
+              return <div className={estilos.first_result}>
+                <div className={estilos.first_result_info}>
                 <h3>{r.title}</h3>
                 <h4>Diet Types</h4>
                 <p>{r.diets.join().replace("," , ", ")}</p>
-                <div className='degree'></div>
+                </div>
+                <div className={estilos.first_result_degrade}></div>
+                <div className={estilos.first_result_fondo}>
                 <img src={r.image} alt="" />
                 <img src={r.image} alt="" />
+                </div>
               </div>
             }
           })
         }
+         <button className={state.page - 9 > 0 ? estilos.button : estilos.none} onClick={() => handleBeforePage()} >anterior</button>
+            <button className={state.page /9 <  allRecipes.length/9 ? estilos.button : estilos.none} onClick={() => handleNextPage()}>siguiente</button>
         </div>
+
+        
     );
 };
 

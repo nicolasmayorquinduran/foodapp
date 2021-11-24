@@ -1,0 +1,88 @@
+.form{
+    text-align: center;
+}
+.nombre{
+    background: linear-gradient(90deg, rgba(255,185,100,1) 0%, rgba(255,213,100,1) 100%);
+    box-shadow: 0px 5px 5px 0 rgba(0,0,0, 0.7);
+
+}
+
+.nombre input{
+    font-size: 4rem;
+    padding: 0 30px;
+    margin: 30px 10%;
+    height: 100px;
+    width: 80%;
+    border-radius: 4rem;
+}
+
+.nombre input::placeholder{
+    font-size: 3rem;
+    color:#aaa;
+    font-family: 'Roboto';
+    font-weight: lighter;
+}
+
+
+
+.resumen{
+    margin: 20px 0;
+}
+
+.resumen textarea{
+    width: 80%;
+    margin-left:10% ;
+    height: 200px;
+    border-radius: 1rem;
+}
+
+.puntaje{
+    margin: auto;
+}
+.puntaje_saludable{
+    margin: auto;
+}
+.pasos{
+    display: inline-grid;
+    width: 80%;
+    margin: 20px 0;
+}
+.lista{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.lista ul{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.lista li{
+    width: 24%;
+}
+
+.dietas{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.diet{
+    width: 23%;
+    margin:1% 0 ;
+    height: 100px;
+}
+
+.diet label{
+    height: 40px;
+}
+
+.enviar{
+    position: absolute;
+    bottom: -446px;
+    left: 50%;
+    transform: translateX(-50%);
+}

@@ -1,0 +1,64 @@
+.contenedor{
+    height: 400px;
+    background-image: url("https://thumbs.dreamstime.com/b/cocer-y-cocinar-el-papel-pintado-alinean-art-style-con-el-espacio-en-blanco-y-las-esquinas-cap%C3%ADtulo-clip-art-editable-65484588.jpg");
+}
+
+.contenedor h1{
+    padding-top: 50px;
+}
+
+.buscador{
+    height: 8rem;
+    display: flex;
+    width: 90%;
+    margin: auto;
+}
+
+.input {
+    font-size: 6rem;
+    height: 100%;
+    width: 80%;
+    border: navajowhite;
+    border-bottom: brown;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+    border-radius: 0 4rem 4rem 0;
+}
+
+.button{
+    height: 100%;
+    width: 20%;
+    border: none;
+    border-right: solid;
+    border-right-color: rgba(255,185,100,0.4);
+    border-radius: 4rem 0rem 0rem 4rem;
+    background: linear-gradient( 
+0deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+}
+
+.input::placeholder {
+    font-size: 6em;
+  }
+
+.filtros{
+
+    display: flex;
+    background-color: rgb(190,100,0);
+    padding: 20px 0 ;
+}
+
+.filtros label {
+    color:#fff
+}
+
+.ordenamientos{
+
+    width: 20%;
+
+}
+
+.dietas{
+
+    width: 80%;
+
+}
+
